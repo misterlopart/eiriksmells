@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Eirik Smells">
+<meta name="theme-color" content="#0e1b20">
+<title>Eirik Smells</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   SETTINGS: the only part you should ever need to edit
+   (the sheet ID and tab names live in the <script> at the bottom)
+   ============================================================ */
+:root{
+  --ink:#0d1a1f;        /* page ground: deep ink-teal */
+  --ink-2:#12242a;      /* cards */
+  --ink-3:#193139;      /* raised / hover */
+  --line:rgba(226,211,178,.13);
+  --line-2:rgba(226,211,178,.24);
+  --bone:#ece3cf;       /* main text */
+  --bone-2:#bdb49d;     /* secondary text */
+  --muted:#7e8b86;      /* tertiary */
+  --gold:#d2ad62;
+  --rose:#d88c9c;
+  --blush:#c9a3a3;
+  --pom:#a43a4f;
+  --plum:#b27c9f;
+  --sage:#9eab76;
+  --slate:#7f98a6;
+  --rust:#cf7a43;
+  --dim:#5d6d72;
+  --serif:"Cormorant Garamond", "Cormorant", Georgia, serif;
+  --body:"EB Garamond", Georgia, serif;
+  --sc:"IM Fell English SC", "EB Garamond", Georgia, serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--ink);color:var(--bone);
+  font-family:var(--body);font-size:17px;line-height:1.45;
+  min-height:100vh;
+  background-image:
+    radial-gradient(1100px 600px at 110% -10%, rgba(164,58,79,.16), transparent 60%),
+    radial-gradient(900px 700px at -20% 10%, rgba(94,107,69,.20), transparent 60%),
+    radial-gradient(800px 500px at 50% 120%, rgba(210,173,98,.07), transparent 60%);
+  background-attachment:fixed;
+}
+button,input,select{font:inherit;color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px 80px}
+
+/* ---------- header ---------- */
+header{position:relative;padding:54px 0 26px;text-align:center;overflow:hidden}
+.orn{position:absolute;top:0;width:340px;height:260px;opacity:.55;pointer-events:none}
+.orn.l{left:-60px}
+.orn.r{right:-60px;transform:scaleX(-1)}
+.kicker{font-family:var(--sc);letter-spacing:.22em;font-size:13px;color:var(--gold);opacity:.9}
+h1{font-family:var(--serif);font-weight:400;font-style:italic;font-size:clamp(52px,10vw,96px);line-height:.95;margin:10px 0 14px;letter-spacing:-.01em}
+h1 span{color:var(--rose)}
+.rule{display:flex;align-items:center;gap:14px;justify-content:center;color:var(--gold);opacity:.75;margin:0 auto 16px;max-width:420px}
+.rule::before,.rule::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+.rule::after{transform:scaleX(-1)}
+.stats{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 26px;font-family:var(--sc);font-size:14px;color:var(--bone-2);letter-spacing:.06em}
+.stats b{font-family:var(--serif);font-weight:500;font-size:22px;color:var(--bone);margin-right:6px;letter-spacing:0}
+
+/* ---------- tabs & controls ---------- */
+.tabs{display:flex;justify-content:center;gap:4px;margin:26px 0 22px}
+.tab{background:none;border:0;border-bottom:1px solid transparent;padding:6px 16px;cursor:pointer;
+  font-family:var(--sc);letter-spacing:.14em;font-size:15px;color:var(--muted)}
+.tab[aria-selected="true"]{color:var(--bone);border-color:var(--gold)}
+.tab:hover{color:var(--bone)}
+.controls{position:sticky;top:0;z-index:5;padding:12px 0 12px;margin:0 -20px;padding-left:20px;padding-right:20px;
+  background:rgba(13,26,31,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);}
+.bar{display:flex;gap:10px;flex-wrap:wrap}
+.search{flex:1 1 260px;position:relative}
+.search input{width:100%;background:var(--ink-2);border:1px solid var(--line);border-radius:999px;padding:10px 16px 10px 40px;font-size:16px;outline:none}
+.search input:focus{border-color:var(--line-2)}
+.search input::placeholder{color:var(--muted);font-style:italic}
+.search svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);opacity:.55}
+select{background:var(--ink-2);border:1px solid var(--line);border-radius:999px;padding:10px 34px 10px 16px;font-size:15px;
+  appearance:none;-webkit-appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23bdb49d' stroke-width='1.3'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--ink-2)}
+.seg button{background:none;border:0;padding:9px 13px;cursor:pointer;font-size:14px;color:var(--bone-2);white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--ink-3);color:var(--bone)}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:transparent;border-radius:999px;
+  padding:5px 12px;font-size:14px;cursor:pointer;color:var(--bone-2);transition:all .15s}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:var(--c,var(--muted))}
+.chip small{color:var(--muted);font-size:12px}
+.chip:hover{border-color:var(--line-2);color:var(--bone)}
+.chip[aria-pressed="true"]{border-color:var(--c,var(--bone-2));color:var(--bone);background:color-mix(in srgb,var(--c,#fff) 14%,transparent)}
+.chip.clear{border-style:dashed}
+.count{font-family:var(--sc);font-size:13px;letter-spacing:.08em;color:var(--muted);margin:14px 2px 6px}
+
+/* ---------- list ---------- */
+.list{display:flex;flex-direction:column}
+.house-h{display:flex;align-items:baseline;gap:12px;margin:28px 0 6px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.house-h h2{font-family:var(--serif);font-weight:500;font-style:italic;font-size:26px;margin:0}
+.house-h span{font-family:var(--sc);font-size:13px;color:var(--muted);letter-spacing:.06em}
+.row{display:grid;grid-template-columns:52px 1fr auto;gap:14px;align-items:center;padding:12px 10px;border-bottom:1px solid var(--line);
+  cursor:pointer;border-radius:10px;transition:background .15s;text-align:left;background:none;border-left:0;border-right:0;border-top:0;width:100%}
+.row:hover,.row:focus-visible{background:var(--ink-2);outline:none}
+.name{font-family:var(--serif);font-size:22px;font-weight:500;line-height:1.1}
+.name .unsure{color:var(--muted);font-size:15px;font-style:italic}
+.house{font-family:var(--sc);font-size:14px;color:var(--bone-2);letter-spacing:.05em;margin-top:2px}
+.op{font-style:italic;color:var(--bone-2);font-size:15px;margin-top:3px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.meta{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--sc);font-size:13px;letter-spacing:.05em;
+  padding:3px 10px;border-radius:999px;border:1px solid color-mix(in srgb,var(--c) 45%,transparent);color:var(--c);white-space:nowrap}
+.sharp{display:inline-flex;align-items:center;gap:4px;font-family:var(--sc);font-size:12px;color:var(--rust);letter-spacing:.06em}
+.sharp.maybe{color:var(--blush)}
+.date{font-size:13px;color:var(--muted)}
+
+/* score ring */
+.ring{position:relative;width:52px;height:52px;display:grid;place-items:center}
+.ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.ring .n{font-family:var(--serif);font-size:21px;font-weight:600;line-height:1}
+.ring .skip{font-family:var(--sc);font-size:11px;color:var(--muted);letter-spacing:.08em}
+.ring .q{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--slate)}
+
+/* ---------- wishlist ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-top:6px}
+.card{background:var(--ink-2);border:1px solid var(--line);border-radius:14px;padding:16px 16px 14px;display:flex;flex-direction:column;gap:6px;position:relative;overflow:hidden}
+.card::after{content:"";position:absolute;right:-30px;top:-30px;width:90px;height:90px;border-radius:50%;
+  background:radial-gradient(circle,color-mix(in srgb,var(--c,var(--gold)) 22%,transparent),transparent 70%)}
+.card .name{font-size:21px}
+.card .notes{font-style:italic;color:var(--bone-2);font-size:15px}
+.kv{font-size:14px;color:var(--bone-2);display:flex;gap:6px}
+.kv i{font-family:var(--sc);font-style:normal;color:var(--muted);font-size:12.5px;letter-spacing:.06em;min-width:62px;padding-top:1px}
+.card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.tried{font-size:13px;color:var(--gold);font-family:var(--sc);letter-spacing:.05em;cursor:pointer;background:none;border:0;padding:0;text-align:left}
+.tried:hover{text-decoration:underline}
+
+/* ---------- detail dialog ---------- */
+dialog{border:1px solid var(--line-2);border-radius:18px;background:var(--ink-2);color:var(--bone);padding:0;
+  width:min(560px,calc(100vw - 24px));max-height:calc(100vh - 40px);box-shadow:0 30px 80px rgba(0,0,0,.55)}
+dialog::backdrop{background:rgba(5,10,12,.72);backdrop-filter:blur(3px)}
+.d-in{padding:28px 26px 24px;position:relative}
+.d-close{position:absolute;right:14px;top:12px;background:none;border:0;font-size:28px;color:var(--muted);cursor:pointer;line-height:1;padding:4px 8px}
+.d-close:hover{color:var(--bone)}
+.d-head{display:flex;gap:18px;align-items:center}
+.d-head .ring{width:84px;height:84px;flex:none}
+.d-head .ring .n{font-size:34px}
+.d-name{font-family:var(--serif);font-weight:500;font-size:32px;line-height:1.05;margin:0}
+.d-house{font-family:var(--sc);font-size:16px;color:var(--bone-2);letter-spacing:.05em;margin-top:4px;cursor:pointer;background:none;border:0;padding:0}
+.d-house:hover{color:var(--gold)}
+.d-tags{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:18px 0 4px}
+.d-sec{margin-top:18px}
+.d-sec h3{font-family:var(--sc);font-weight:400;font-size:13px;letter-spacing:.16em;color:var(--gold);margin:0 0 8px}
+.notes-chips{display:flex;flex-wrap:wrap;gap:6px}
+.note{border:1px solid var(--line);border-radius:999px;padding:3px 11px;font-size:15px;color:var(--bone-2);cursor:pointer;background:none}
+.note:hover{border-color:var(--sage);color:var(--bone)}
+blockquote{margin:0;font-family:var(--serif);font-style:italic;font-size:22px;line-height:1.3;color:var(--bone);
+  border-left:2px solid var(--rose);padding:2px 0 2px 16px}
+.sibs{display:flex;flex-direction:column}
+.sib{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;text-align:left;width:100%;font-size:16px}
+.sib:hover{color:var(--gold)}
+.sib span:last-child{font-family:var(--serif);font-weight:600;color:var(--bone-2)}
+
+.empty,.state{text-align:center;color:var(--muted);font-style:italic;padding:60px 20px;font-size:19px}
+.state b{display:block;font-style:normal;color:var(--bone);font-family:var(--serif);font-size:26px;font-weight:500;margin-bottom:6px}
+footer{text-align:center;color:var(--muted);font-size:13px;font-family:var(--sc);letter-spacing:.1em;margin-top:50px}
+
+@media (max-width:640px){
+  body{font-size:16px}
+  .wrap{padding:0 16px 60px}
+  .controls{margin:0 -16px;padding-left:16px;padding-right:16px}
+  header{padding-top:40px}
+  .orn{width:200px;height:150px;opacity:.28;top:-14px}
+  .orn.l{left:-70px}.orn.r{right:-70px}
+  .row{grid-template-columns:46px 1fr;gap:12px;padding:12px 4px}
+  .ring{width:46px;height:46px}
+  .meta{grid-column:2;flex-direction:row;align-items:center;flex-wrap:wrap;gap:8px;margin-top:-4px}
+  .name{font-size:20px}
+  .d-in{padding:24px 18px 20px}
+  .d-name{font-size:27px}
+  .seg button{padding:9px 10px}
+  .controls{position:static;background:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+  .bar select{flex:1}
+  .chips{flex-wrap:nowrap;overflow-x:auto;margin-right:-16px;padding-right:16px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:none}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <!-- engraved botanical sprig, drawn in line -->
+    <svg class="orn l" viewBox="0 0 340 260" fill="none" aria-hidden="true">
+      <defs>
+        <g id="leaf">
+          <path d="M0 0 C 14 -20, 48 -24, 70 0 C 48 22, 14 20, 0 0 Z" stroke="#9eab76" stroke-width="1.1"/>
+          <path d="M0 0 L 66 0" stroke="#9eab76" stroke-width=".8"/>
+          <path d="M12 0 L 20 -9 M24 0 L 33 -12 M36 0 L 45 -12 M48 0 L 55 -9 M12 0 L 20 9 M24 0 L 33 12 M36 0 L 45 12 M48 0 L 55 9" stroke="#9eab76" stroke-width=".6" opacity=".8"/>
+        </g>
+        <g id="fig">
+          <path d="M0 -34 C 6 -30, 8 -22, 16 -14 C 30 -2, 28 26, 0 30 C -28 26, -30 -2, -16 -14 C -8 -22, -6 -30, 0 -34 Z" stroke="#b27c9f" stroke-width="1.2"/>
+          <path d="M-18 -6 C -14 10, -8 22, -2 28 M-10 -16 C -8 4, -4 18, 2 29 M0 -26 C 2 -4, 6 14, 10 27 M10 -18 C 14 0, 16 14, 18 22 M-22 6 C -18 16, -12 24, -6 29" stroke="#b27c9f" stroke-width=".6" opacity=".75"/>
+          <path d="M0 -34 L 0 -42" stroke="#b27c9f" stroke-width="1"/>
+        </g>
+      </defs>
+      <path d="M-10 40 C 60 50, 120 90, 170 150 C 200 186, 240 206, 300 214" stroke="#c9a56a" stroke-width="1.4"/>
+      <path d="M-10 44 C 60 54, 118 94, 168 154" stroke="#c9a56a" stroke-width=".5" opacity=".6"/>
+      <use href="#leaf" transform="translate(40 46) rotate(-40)"/>
+      <use href="#leaf" transform="translate(70 58) rotate(35) scale(.9)"/>
+      <use href="#leaf" transform="translate(112 90) rotate(-55) scale(1.05)"/>
+      <use href="#leaf" transform="translate(150 128) rotate(20) scale(.8)"/>
+      <use href="#leaf" transform="translate(200 184) rotate(-30) scale(.75)"/>
+      <use href="#leaf" transform="translate(246 204) rotate(40) scale(.6)"/>
+      <use href="#fig" transform="translate(132 150) rotate(-12) scale(.95)"/>
+      <use href="#fig" transform="translate(98 112) rotate(18) scale(.62)"/>
+      <g stroke="#d88c9c" stroke-width=".9">
+        <circle cx="222" cy="196" r="3.2"/><circle cx="229" cy="190" r="2.6"/><circle cx="218" cy="188" r="2.3"/><circle cx="226" cy="200" r="2"/>
+      </g>
+    </svg>
+    <svg class="orn r" viewBox="0 0 340 260" aria-hidden="true"><use href="#leaf" transform="translate(40 46) rotate(-40)"/><path d="M-10 40 C 60 50, 120 90, 170 150 C 200 186, 240 206, 300 214" stroke="#c9a56a" stroke-width="1.4" fill="none"/><use href="#leaf" transform="translate(70 58) rotate(35) scale(.9)"/><use href="#leaf" transform="translate(112 90) rotate(-55) scale(1.05)"/><use href="#leaf" transform="translate(150 128) rotate(20) scale(.8)"/><use href="#fig" transform="translate(186 170) rotate(-20) scale(.8)"/><use href="#leaf" transform="translate(246 204) rotate(40) scale(.6)"/></svg>
+
+    <div class="kicker">A catalogue of things smelled</div>
+    <h1>Eirik <span>Smells</span></h1>
+    <div class="rule">❦</div>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" data-view="tried" aria-selected="true">Collection</button>
+    <button class="tab" role="tab" data-view="want" aria-selected="false">Wishlist</button>
+  </nav>
+
+  <div class="controls">
+    <div class="bar">
+      <label class="search">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5.2" stroke="currentColor" stroke-width="1.3"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.3"/></svg>
+        <input id="q" type="search" placeholder="Search names, houses, notes, opinions…" autocomplete="off">
+      </label>
+      <select id="sort" aria-label="Sort"></select>
+      <div class="seg" id="trig" role="group" aria-label="Trigeminal filter">
+        <button data-t="all" aria-pressed="true">All</button>
+        <button data-t="hide" aria-pressed="false">Hide sharp</button>
+        <button data-t="only" aria-pressed="false">Only sharp</button>
+      </div>
+    </div>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <div class="count" id="count"></div>
+  <main id="out"><div class="state"><b>Uncorking…</b>Fetching the sheet</div></main>
+
+  <footer>Live from the Eirik Smells spreadsheet</footer>
+</div>
+
+<dialog id="dlg"><div class="d-in" id="dlgIn"></div></dialog>
+
+<script>
+/* ============================================================
+   CONFIG: point this at the Google Sheet.
+   The sheet must be shared as "Anyone with the link can view".
+   Tab names must match the tabs in the sheet exactly.
+   ============================================================ */
+const CONFIG = {
+  sheetId:   "1-1ge0RJqWBP4aHB_zdm0cwTQhM_qm8KTwS6fDg-lrAs",
+  triedTab:  "Reviews",
+  wantTab:   "Perfumes I Want",
+};
+
+/* Status labels from the "Next Steps" column, in display order, with colors. */
+const STATUSES = [
+  { key:"bottle",                  label:"Bottle",                  c:"var(--gold)"  },
+  { key:"enjoy",                   label:"Enjoy",                   c:"var(--rose)"  },
+  { key:"keep an eye out",         label:"Keep an eye out",         c:"var(--plum)"  },
+  { key:"try again",               label:"Try Again",               c:"var(--sage)"  },
+  { key:"try",                     label:"Try",                     c:"var(--slate)" },
+  { key:"thanks for the memories", label:"Thanks For The Memories", c:"var(--bone-2)"},
+  { key:"offload",                 label:"Offload",                 c:"var(--rust)"  },
+  { key:"skipped",                 label:"Skipped",                 c:"var(--dim)"   },
+];
+const WANTS = [
+  { key:"full bottle", label:"Full Bottle", c:"var(--gold)"  },
+  { key:"travel",      label:"Travel",      c:"var(--rose)"  },
+  { key:"sample",      label:"Sample",      c:"var(--sage)"  },
+];
+
+/* ---------------- helpers ---------------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+const fold = s => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+const clean = s => String(s ?? "").replace(/\s+/g," ").trim();
+// Merge spelling variants of the same house: accents, "&", ®, spaces, "Perfumes"/"Studio(s)"/"Parfumerie" suffixes.
+const houseKey = h => fold(h).replace(/\b(perfumes?|parfums?|parfumerie|perfumery|studios?)\b/g,"").replace(/[^a-z0-9]/g,"");
+const nameKey  = n => fold(n).replace(/[^a-z0-9]/g,"");
+
+function parseCSV(text){
+  const rows=[]; let row=[], f="", q=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(q){
+      if(ch==='"'){ if(text[i+1]==='"'){f+='"';i++;} else q=false; }
+      else f+=ch;
+    } else if(ch==='"') q=true;
+    else if(ch===','){ row.push(f); f=""; }
+    else if(ch==='\n'||ch==='\r'){ if(ch==='\r'&&text[i+1]==='\n') i++; row.push(f); rows.push(row); row=[]; f=""; }
+    else f+=ch;
+  }
+  if(f!==""||row.length){ row.push(f); rows.push(row); }
+  return rows;
+}
+// Find columns by header wording, so reordering or renaming slightly in the sheet won't break anything.
+function mapCols(header, spec){
+  const h = header.map(x=>fold(x).trim());
+  const out = {};
+  for(const [k, test] of Object.entries(spec)) out[k] = h.findIndex(test);
+  return out;
+}
+const sheetURL = tab => `https://docs.google.com/spreadsheets/d/${CONFIG.sheetId}/gviz/tq?tqx=out:csv&headers=1&sheet=${encodeURIComponent(tab)}`;
+async function getTab(tab){
+  const r = await fetch(sheetURL(tab), {cache:"no-store"});
+  if(!r.ok) throw new Error(tab+": HTTP "+r.status);
+  const t = await r.text();
+  if(/^\s*</.test(t)) throw new Error(tab+": not shared publicly");
+  return parseCSV(t);
+}
+function parseDate(s){
+  const m = clean(s).match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+  if(!m) return null;
+  let y = +m[3]; if(y<100) y+=2000;
+  const d = new Date(y, +m[1]-1, +m[2]);
+  return isNaN(d) ? null : d;
+}
+const fmtDate = d => d ? d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}) : "";
+
+function scoreColor(s){
+  if(s==null) return "var(--dim)";
+  if(s>=90) return "var(--gold)";
+  if(s>=80) return "var(--rose)";
+  if(s>=70) return "var(--blush)";
+  if(s>=55) return "var(--sage)";
+  if(s>=30) return "var(--slate)";
+  return "var(--dim)";
+}
+function ring(p, size=52){
+  const r = size/2 - 3, C = 2*Math.PI*r;
+  let inner, frac = 0, col = "var(--dim)";
+  if(p.skipped){ inner = `<span class="skip">skip</span>`; }
+  else if(p.score==null){ inner = `<span class="q">—</span>`; }
+  else { frac = Math.max(0,Math.min(100,p.score))/100; col = scoreColor(p.score); inner = `<span class="n">${p.score}</span>`; }
+  return `<div class="ring" style="width:${size}px;height:${size}px">
+    <svg viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" stroke="rgba(226,211,178,.12)" stroke-width="1.5" fill="none"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" stroke="${col}" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-dasharray="${C*frac} ${C}"/></svg>${inner}</div>`;
+}
+const statusOf = key => STATUSES.find(s=>s.key===key);
+function pill(label, c){ return `<span class="pill" style="--c:${c}">${esc(label)}</span>`; }
+function statusPill(p){
+  const s = statusOf(p.statusKey);
+  return p.status ? pill(s ? s.label : p.status, s ? s.c : "var(--bone-2)") : "";
+}
+const zig = `<svg width="13" height="9" viewBox="0 0 13 9" fill="none"><path d="M1 7 L4 2 L6.5 7 L9 2 L12 7" stroke="currentColor" stroke-width="1.2"/></svg>`;
+function sharpTag(p){
+  if(p.trig==="yes")   return `<span class="sharp" title="Trigeminally challenging">${zig} sharp</span>`;
+  if(p.trig==="maybe") return `<span class="sharp maybe" title="Maybe trigeminally challenging: ${esc(p.trigRaw)}">${zig} maybe sharp</span>`;
+  return "";
+}
+
+/* ---------------- state ---------------- */
+const state = { view:"tried", q:"", sort:"score-desc", trig:"all", statuses:new Set(), wants:new Set() };
+let TRIED = [], WANT = [], HOUSE_NAMES = {};
+try{ const v = localStorage.getItem("smells-view"); if(v==="want"||v==="tried") state.view=v; }catch(e){}
+
+/* ---------------- load ---------------- */
+async function load(){
+  const [triedRows, wantRows] = await Promise.all([
+    getTab(CONFIG.triedTab),
+    getTab(CONFIG.wantTab).catch(()=>null),
+  ]);
+
+  // ---- Reviews tab ----
+  const th = triedRows[0];
+  const tc = mapCols(th, {
+    name:  h=>h==="name",
+    house: h=>h==="house",
+    notes: h=>h==="notes",
+    rating:h=>h.startsWith("rating")||h==="score",
+    op:    h=>h.includes("opinion"),
+    date:  h=>h.startsWith("date"),
+    next:  h=>h.includes("next"),
+    trig:  h=>h.includes("trigem"),
+  });
+  const g = (r,k) => tc[k]>=0 ? clean(r[tc[k]]) : "";
+  TRIED = triedRows.slice(1).map((r,i)=>{
+    const name = g(r,"name"); if(!name) return null;
+    const raw = g(r,"rating");
+    const skipped = /^0+$/.test(raw);
+    const num = raw.match(/\d+/);
+    const score = (!skipped && num) ? +num[0] : null;
+    const trigRaw = g(r,"trig");
+    const tf = fold(trigRaw);
+    const trig = /^y/.test(tf) ? "yes" : /^(maybe|a little|some)/.test(tf) ? "maybe" : "";
+    const status = g(r,"next");
+    const notesRaw = g(r,"notes");
+    return {
+      id:i, name, house:g(r,"house"), hk:houseKey(g(r,"house")),
+      notesRaw, notes: notesRaw.replace(/\.$/,"").split(/\s*,\s*/).map(clean).filter(x=>x && x!=="?"),
+      raw, score, unsure:/\?/.test(raw) && score!=null, skipped,
+      op:g(r,"op"), date:parseDate(g(r,"date")), status, statusKey:fold(status).trim(),
+      trig, trigRaw,
+    };
+  }).filter(Boolean);
+
+  // Canonical display name for each house = its most common spelling.
+  const tally = {};
+  TRIED.forEach(p=>{ (tally[p.hk] ??= {})[p.house] = ((tally[p.hk]||{})[p.house]||0)+1; });
+  // ---- Wishlist tab ----
+  if(wantRows){
+    const wc = mapCols(wantRows[0], {
+      name:h=>h==="name", house:h=>h==="house", notes:h=>h==="notes", rating:h=>h.startsWith("rating"),
+      op:h=>h.includes("opinion"), where:h=>h.includes("buy"), want:h=>h.includes("want"), heard:h=>h.includes("hear"),
+    });
+    const w = (r,k) => wc[k]>=0 ? clean(r[wc[k]]) : "";
+    WANT = wantRows.slice(1).map((r,i)=>{
+      const name = w(r,"name"); if(!name) return null;
+      const want = w(r,"want");
+      return { id:i, name, house:w(r,"house"), hk:houseKey(w(r,"house")), notes:w(r,"notes"), op:w(r,"op"),
+               where:w(r,"where"), want, wantKey:fold(want).trim(), heard:w(r,"heard") };
+    }).filter(Boolean);
+    WANT.forEach(p=>{ (tally[p.hk] ??= {})[p.house] = ((tally[p.hk]||{})[p.house]||0)+1; });
+  }
+  for(const [k, spellings] of Object.entries(tally)){
+    HOUSE_NAMES[k] = Object.entries(spellings).sort((a,b)=>b[1]-a[1] || b[0].length-a[0].length)[0][0];
+  }
+  [...TRIED, ...WANT].forEach(p=>{ p.houseD = HOUSE_NAMES[p.hk] || p.house; });
+
+  // Link wishlist items to anything already tried
+  const triedIdx = new Map(TRIED.map(p=>[p.hk+"|"+nameKey(p.name), p]));
+  WANT.forEach(p=>{ p.triedMatch = triedIdx.get(p.hk+"|"+nameKey(p.name)) || null; });
+
+  renderStats();
+  setView(state.view);
+}
+
+/* ---------------- render ---------------- */
+function renderStats(){
+  const rated = TRIED.filter(p=>p.score!=null);
+  const avg = rated.length ? Math.round(rated.reduce((a,p)=>a+p.score,0)/rated.length) : 0;
+  const houses = new Set(TRIED.map(p=>p.hk)).size;
+  $("#stats").innerHTML = [
+    [rated.length, "scored"],
+    [houses, "houses"],
+    [TRIED.filter(p=>p.statusKey==="try").length, "to try"],
+    [avg, "average"],
+    [TRIED.filter(p=>p.statusKey==="bottle").length, "bottles"],
+  ].map(([n,l])=>`<span><b>${n}</b>${l}</span>`).join("");
+}
+
+function setView(v){
+  state.view = v;
+  try{ localStorage.setItem("smells-view", v); }catch(e){}
+  document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected", t.dataset.view===v));
+  const sorts = v==="tried"
+    ? [["score-desc","Score: high → low"],["score-asc","Score: low → high"],["house","House A–Z"],["name","Name A–Z"],["recent","Recently tried"]]
+    : [["house","House A–Z"],["name","Name A–Z"],["want","Bottles first"]];
+  if(!sorts.some(s=>s[0]===state.sort)) state.sort = sorts[0][0];
+  $("#sort").innerHTML = sorts.map(([k,l])=>`<option value="${k}" ${k===state.sort?"selected":""}>${l}</option>`).join("");
+  $("#trig").style.display = v==="tried" ? "" : "none";
+  render();
+}
+
+function matchesQ(p, q){
+  if(!q) return true;
+  const hay = fold([p.name, p.house, p.houseD, p.notesRaw ?? p.notes, p.op, p.where, p.heard, p.status].join(" "));
+  return q.split(/\s+/).every(t=>hay.includes(t));
+}
+
+function renderChips(items, defs, keyOf, set){
+  const counts = {};
+  items.forEach(p=>{ const k=keyOf(p); counts[k]=(counts[k]||0)+1; });
+  const known = defs.filter(d=>counts[d.key]);
+  const extra = Object.keys(counts).filter(k=>!defs.some(d=>d.key===k)).map(k=>({key:k,label:k?k.replace(/\b\w/g,c=>c.toUpperCase()):"Unsorted",c:"var(--muted)"}));
+  $("#chips").innerHTML = [...known, ...extra].map(d=>
+    `<button class="chip" data-k="${esc(d.key)}" style="--c:${d.c}" aria-pressed="${set.has(d.key)}"><span class="dot"></span>${esc(d.label)} <small>${counts[d.key]}</small></button>`
+  ).join("") + (set.size ? `<button class="chip clear" data-k="__clear">Clear</button>` : "");
+}
+
+function render(){
+  const q = fold(state.q).trim();
+  if(state.view==="tried") renderTried(q); else renderWant(q);
+}
+
+function renderTried(q){
+  // chips count reflects search + trig filter, so numbers stay honest
+  let base = TRIED.filter(p=>matchesQ(p,q));
+  if(state.trig==="hide") base = base.filter(p=>p.trig!=="yes");
+  if(state.trig==="only") base = base.filter(p=>p.trig==="yes"||p.trig==="maybe");
+  renderChips(base, STATUSES, p=>p.statusKey, state.statuses);
+  let list = state.statuses.size ? base.filter(p=>state.statuses.has(p.statusKey)) : base;
+
+  const byName = (a,b)=>a.name.localeCompare(b.name);
+  const sv = p => p.score ?? (p.skipped ? -2 : -1);
+  const sorters = {
+    "score-desc": (a,b)=> sv(b)-sv(a) || byName(a,b),
+    "score-asc":  (a,b)=> (a.score==null)-(b.score==null) || sv(a)-sv(b) || byName(a,b),
+    "house":      (a,b)=> a.houseD.localeCompare(b.houseD) || sv(b)-sv(a) || byName(a,b),
+    "name":       byName,
+    "recent":     (a,b)=> (b.date?.getTime()??-Infinity) - (a.date?.getTime()??-Infinity) || byName(a,b),
+  };
+  list = list.slice().sort(sorters[state.sort]);
+  $("#count").textContent = `${list.length} ${list.length===1?"perfume":"perfumes"}`;
+  if(!list.length){ $("#out").innerHTML = `<div class="empty">Nothing matches. Try loosening the filters.</div>`; return; }
+
+  const row = p => `<button class="row" data-id="${p.id}">
+      ${ring(p)}
+      <div>
+        <div class="name">${esc(p.name)}${p.unsure?` <span class="unsure">(tentative)</span>`:""}</div>
+        <div class="house">${esc(p.houseD)}</div>
+        ${p.op?`<div class="op">${esc(p.op)}</div>`:""}
+      </div>
+      <div class="meta">${statusPill(p)}${sharpTag(p)}${p.date?`<span class="date">${fmtDate(p.date)}</span>`:""}</div>
+    </button>`;
+
+  if(state.sort==="house"){
+    let html="", cur=null, group=[];
+    const flush=()=>{ if(!group.length) return;
+      const sc = group.filter(p=>p.score!=null);
+      const avg = sc.length ? Math.round(sc.reduce((a,p)=>a+p.score,0)/sc.length) : null;
+      html += `<div class="house-h"><h2>${esc(group[0].houseD)}</h2><span>${group.length} tried${avg!=null?` · avg ${avg}`:""}</span></div>` + group.map(row).join("");
+      group=[]; };
+    list.forEach(p=>{ if(p.hk!==cur){ flush(); cur=p.hk; } group.push(p); }); flush();
+    $("#out").innerHTML = `<div class="list">${html}</div>`;
+  } else {
+    $("#out").innerHTML = `<div class="list">${list.map(row).join("")}</div>`;
+  }
+}
+
+function renderWant(q){
+  const base = WANT.filter(p=>matchesQ(p,q));
+  renderChips(base, WANTS, p=>p.wantKey, state.wants);
+  let list = state.wants.size ? base.filter(p=>state.wants.has(p.wantKey)) : base;
+  const rank = k => { const i = WANTS.findIndex(w=>w.key===k); return i<0?9:i; };
+  const sorters = {
+    house:(a,b)=>a.houseD.localeCompare(b.houseD)||a.name.localeCompare(b.name),
+    name:(a,b)=>a.name.localeCompare(b.name),
+    want:(a,b)=>rank(a.wantKey)-rank(b.wantKey)||a.houseD.localeCompare(b.houseD),
+  };
+  list = list.slice().sort(sorters[state.sort]||sorters.house);
+  $("#count").textContent = `${list.length} on the wishlist`;
+  if(!WANT.length){ $("#out").innerHTML = `<div class="empty">Couldn't find a "${esc(CONFIG.wantTab)}" tab.</div>`; return; }
+  if(!list.length){ $("#out").innerHTML = `<div class="empty">Nothing matches.</div>`; return; }
+  $("#out").innerHTML = `<div class="grid">${list.map(p=>{
+    const w = WANTS.find(x=>x.key===p.wantKey);
+    return `<div class="card" style="--c:${w?w.c:"var(--muted)"}">
+      <div class="top"><div><div class="name">${esc(p.name)}</div><div class="house">${esc(p.houseD)}</div></div>
+      ${p.want?pill(w?w.label:p.want, w?w.c:"var(--bone-2)"):""}</div>
+      ${p.notes?`<div class="notes">${esc(p.notes)}</div>`:""}
+      ${p.op?`<div class="kv"><i>thoughts</i><span>${esc(p.op)}</span></div>`:""}
+      ${p.where?`<div class="kv"><i>find at</i><span>${esc(p.where)}</span></div>`:""}
+      ${p.heard?`<div class="kv"><i>via</i><span>${esc(p.heard)}</span></div>`:""}
+      ${p.triedMatch?`<button class="tried" data-id="${p.triedMatch.id}">Already tried${p.triedMatch.score!=null?` · ${p.triedMatch.score}`:p.triedMatch.skipped?" · skipped":""} →</button>`:""}
+    </div>`;}).join("")}</div>`;
+}
+
+/* ---------------- detail ---------------- */
+function openDetail(id){
+  const p = TRIED.find(x=>x.id===id); if(!p) return;
+  const sibs = TRIED.filter(x=>x.hk===p.hk && x.id!==p.id).sort((a,b)=>(b.score??-1)-(a.score??-1));
+  $("#dlgIn").innerHTML = `
+    <button class="d-close" aria-label="Close">×</button>
+    <div class="d-head">${ring(p,84)}
+      <div><h2 class="d-name">${esc(p.name)}</h2><button class="d-house" data-house="${esc(p.houseD)}">${esc(p.houseD)}</button></div>
+    </div>
+    <div class="d-tags">${statusPill(p)}${sharpTag(p)}${p.date?`<span class="date">Tried ${fmtDate(p.date)}</span>`:""}${p.unsure?`<span class="date">Score is tentative (${esc(p.raw)})</span>`:""}</div>
+    ${p.op?`<div class="d-sec"><h3>My opinion</h3><blockquote>${esc(p.op)}</blockquote></div>`:""}
+    ${p.notes.length?`<div class="d-sec"><h3>Notes</h3><div class="notes-chips">${p.notes.map(n=>`<button class="note" data-note="${esc(n)}">${esc(n)}</button>`).join("")}</div></div>`:""}
+    ${p.trigRaw && !p.trig && !/^no$/i.test(p.trigRaw)?`<div class="d-sec"><h3>Trigeminal</h3><div>${esc(p.trigRaw)}</div></div>`:""}
+    ${sibs.length?`<div class="d-sec"><h3>Also from ${esc(p.houseD)}</h3><div class="sibs">${sibs.map(s=>`<button class="sib" data-id="${s.id}"><span>${esc(s.name)}</span><span>${s.score??(s.skipped?"skip":"—")}</span></button>`).join("")}</div></div>`:""}
+  `;
+  const d = $("#dlg");
+  if(!d.open) d.showModal();
+  d.scrollTop = 0;
+}
+function searchFor(text){
+  $("#dlg").close();
+  state.q = text; $("#q").value = text;
+  if(state.view!=="tried") setView("tried"); else render();
+  window.scrollTo({top: $(".tabs").offsetTop - 10, behavior:"smooth"});
+}
+
+/* ---------------- events ---------------- */
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{ setView(t.dataset.view); }));
+$("#q").addEventListener("input", e=>{ state.q = e.target.value; render(); });
+$("#sort").addEventListener("change", e=>{ state.sort = e.target.value; render(); });
+$("#trig").addEventListener("click", e=>{
+  const b = e.target.closest("button"); if(!b) return;
+  state.trig = b.dataset.t;
+  $("#trig").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x===b));
+  render();
+});
+$("#chips").addEventListener("click", e=>{
+  const b = e.target.closest(".chip"); if(!b) return;
+  const set = state.view==="tried" ? state.statuses : state.wants;
+  const k = b.dataset.k;
+  if(k==="__clear") set.clear(); else set.has(k) ? set.delete(k) : set.add(k);
+  render();
+});
+$("#out").addEventListener("click", e=>{
+  const r = e.target.closest("[data-id]"); if(r) openDetail(+r.dataset.id);
+});
+$("#dlg").addEventListener("click", e=>{
+  if(e.target.id==="dlg" || e.target.closest(".d-close")) return $("#dlg").close();
+  const s = e.target.closest(".sib"); if(s) return openDetail(+s.dataset.id);
+  const n = e.target.closest(".note"); if(n) return searchFor(n.dataset.note);
+  const h = e.target.closest(".d-house"); if(h){ $("#dlg").close(); state.sort="house"; $("#sort").value="house"; return searchFor(h.dataset.house); }
+});
+
+load().catch(err=>{
+  console.error(err);
+  $("#out").innerHTML = `<div class="state"><b>Couldn't reach the sheet</b>Check it's shared as "Anyone with the link can view," and that the tab is named "${esc(CONFIG.triedTab)}".</div>`;
+});
+</script>
+</body>
+</html>
